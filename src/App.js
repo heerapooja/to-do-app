@@ -16,7 +16,7 @@ function App() {
     setTasks(tasks || []);
   }, []);
   
- 
+
   function addTask(name) {
     setTasks(prev => {
       return [...prev, {name:name, done:false}];
@@ -28,6 +28,12 @@ function App() {
       const newTasks = [...prev];
       newTasks[taskIndex].done = newDone;
       return newTasks;
+    });
+  }
+
+  function removeTask(taskIndex) {
+    setTasks(prev=>{
+      return prev.filter((taskObkect, index)=> index!==taskIndex);
     });
   }
   
@@ -42,9 +48,17 @@ function App() {
     else if (perc === 100) {
       return 'Nice job for today !'
     }
-    return 'Keep it going ';
+    return 'Keep it going!!';
   }
 
+  function renameTask(index, newName) {
+    setTasks(prev=>{
+      const newTasks = [...prev];
+      newTasks[index].name = newName;
+      return newTasks;
+    })
+    
+  }
 
   return (
     <main>
@@ -53,6 +67,8 @@ function App() {
       <TaskForm onAdd={addTask} />
       {tasks.map((task, index)=> (
         <Task {...task} 
+        onRename={newName => renameTask(index, newName)}
+        onDelete={()=> removeTask(index)}
         onToggle={done=> updateTaskDone(index, done)} />
       ))}
     </main>
